@@ -1,0 +1,195 @@
+\documentclass[a4paper, 12pt]{article}
+ 
+\usepackage[T1]{fontenc} 
+\usepackage{mathtools}
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{circuitikz}
+
+\renewcommand\qedsymbol{$\blacksquare$}
+\newcommand\ZZ{$\mathrm{Z\kern-.3em\raise-0.5ex\hbox{Z}}$}
+\newcommand*\xor{\oplus}
+
+\title{DCT - \"Ubung 1}
+\author{Nik Benson}
+
+\begin{document}
+
+\maketitle
+\tableofcontents\newpage
+
+
+\section{Dualit\"at}
+\"Uberpr\"ufen Sie, ob folgende Boolesche Ausdr\"ucke selbstdual sind:
+
+\subsection{\ZZ: $a$ ist Selbstdual}
+\begin{proof}
+    \[a=a\cdot 1=a+0=a\]
+\end{proof}
+
+\subsection{\ZZ: $\neg a+(1+b)$ ist Selbstdual}
+\begin{proof*}
+    \[\neg a+(1+b)=\neg a+1=1\neq 0=\neg a\cdot 0=\neg a\cdot 0=\neg a\cdot(0\cdot b)\Rightarrow\!\Leftarrow\]
+\end{proof*}
+
+\subsection{\ZZ: $ab+\neg a\neg b$ ist Selbstdual}
+\begin{proof*}
+    \[ab+\neg a\neg b\neq (a+b)\cdot(\neg a+\neg b)\Rightarrow\!\Leftarrow\]
+\end{proof*}
+
+\subsection{\ZZ: $\neg a\neg b + \neg a\neg c+\neg b\neg c$ ist Selbstdual}
+\begin{proof}
+    \[
+        \begin{aligned}
+              & \neg a\cdot\neg b + \neg a\cdot\neg c+\neg b\cdot\neg c\\
+            = & \neg(a+b)+\neg(a+c)+\neg(b+c)\\
+            = & \neg(abc)\\
+            = & \neg(a\cdot(b+c)+(bc))\\
+            = & \neg(ab+ac+bc)\\
+            = & \neg(ab)\cdot\neg(ac)\cdot\neg(bc)\\
+            = & (\neg a+\neg b) \cdot (\neg a+\neg c)\cdot(\neg b+\neg c)
+        \end{aligned}
+    \]
+\end{proof}
+
+\section{Theoreme der Booleschen Algebra}
+Beweisen Sie folgende Theoreme durch algebraische Manipulation:
+
+\subsection{\ZZ: Das 0-Element ist eindeutig}
+\begin{proof}
+    Annahme, dass 2 0-Elemente, $0_1$ und $0_2$, existieren:
+    \[
+        0_1=0_1\cdot 1=\neg(\neg 0_1+\neg 1)=\neg(1+0)=\neg(\neg 0_2+\neg 1)=\neg(\neg 0_2+\neg 1)=0_2\cdot 1=0_2
+    \]
+\end{proof}
+
+\subsection{\ZZ: $\forall a\in\mathbb{B}:a+1=1$}
+\begin{proof}
+    \[
+        a=\neg a\cdot 0=a+1
+    \]
+\end{proof}
+
+\subsection{\ZZ: $\forall a,b\in\mathbb{B}:a+a\cdot b=a$}
+\begin{proof}
+    \[
+        a+a\cdot b=(a\cdot 1)+(a\cdot b)=a\cdot(b+1)=a
+    \]
+\end{proof}
+
+\subsection{\ZZ: $\forall a,b\in\mathbb{B}:\neg(a+b)=\neg a\cdot\neg b$}
+\begin{proof}
+    \[
+        \neg(a+b)=0+(\neg a\cdot\neg b)=(\neg a+0)\cdot(\neg b+0)=\neg a\cdot\neg b
+    \]
+\end{proof}
+
+\section{Mintermnormalform}
+Geben Sie f\"ur die Funktion: $z(x_1, x_2, x_3) = x_1 \xor x_2 \xor x_3$ die \dots
+
+\subsection{\dots Minitermnormalform an.}
+\begin{center}
+    \begin{tabular}{|c|c|c||c|}
+        \hline
+        $x_1$ & $x_2$ & $x_3$ & $z(x_1, x_2, x_3)$\\
+        \hline
+        0 & 0 & 0 & 0\\
+        1 & 0 & 0 & 1\\
+        0 & 1 & 0 & 1\\
+        0 & 0 & 1 & 1\\
+        1 & 1 & 0 & 0\\
+        0 & 1 & 1 & 0\\
+        1 & 0 & 1 & 0\\
+        1 & 1 & 1 & 1\\
+        \hline
+    \end{tabular}
+\end{center}
+\[\therefore z(x_1,s_2,x_3)=x_1\neg x_2\neg x_3+\neg x_1x_2\neg x_3+\neg x_1\neg x_2x_3+x_1x_2x_3\]
+
+\subsection{\dots die entsprechende Schaltung an.}
+\begin{center}
+    \begin{circuitikz}
+        \ctikzset{logic ports=european}
+
+      \draw
+        (1,3) node[spdt] (x1) {$x_1$}
+        (3,4) node[spdt] (x21) {$x_2$}
+        (3,2) node[spdt] (x22) {$x_2$}
+        (5,4) node[spdt, rotate=180] (x31) {\rotatebox{180}{$x_3$}}
+        (5,2) node[spdt, rotate=180] (x32) {\rotatebox{180}{$x_3$}}
+        
+        (0,0)
+        to[battery] (0,3)
+        to (x1.in)
+        (x1.out 1) node[above] {0}
+        to[short] (x21.in)
+        (x21.out 1) node[above] {0}
+        to[short] (x31.out 2) node[above] {1}
+        (x31.in)
+        to[short] (6,4)
+        to[short] (6,0)
+        to[short] (0,0)
+        (x21.out 2) node[below] {1}
+        to[short] (x31.out 1) node[below] {0}
+        (x1.out 2) node[below] {1}
+        to[short] (x22.in)
+        (x22.out 1) node[above] {0}
+        to (x32.out 2) node[above] {0}
+        (x22.out 2) node[below] {1}
+        to (x32.out 1) node[below] {1}
+        (x32.in)
+        to (6,2);
+    \end{circuitikz}
+  \end{center}
+
+  \section{Normalformen}
+  Gegeben ist die Schaltung in Abbildung 1.
+
+  \subsection{Geben Sie f\"ur die Funktion dieser Schaltung diejenige Normalform an (Minterm oder Maxtermnormalform), die k\"urzer ist}
+  $0$
+
+  \subsection{Realisieren Sie die Funktion mit 2-NAND Gattern}
+  \begin{center}
+    \begin{circuitikz}
+        \ctikzset{logic ports=american}
+
+        \node[nand port] (a) at (2,0.5){};
+        \node[nand port] (b) at (4,0){};
+        \node[nand port] (c) at (6,0){};
+
+        \draw
+        (a.in 1) to ++ (-1,0) to ++ (0,-1.07)
+        (a.in 1) to ++ (-2,0) node[left] {a}
+        (a.in 2) to ++ (-2,0) node[left] {b}
+        (a.out) |- (b.in 1)
+        (b.in 2) to ++ (-4,0) node[left] {c}
+        (b.out) |- (c.in 1)
+        (b.out) |- (c.in 2)
+        (c.out) to ++ (0.5,0) node[right] {out};
+    \end{circuitikz}
+  \end{center}
+
+\section{Vollst\"andige Gattermengen}
+Untersuchen Sie, ob die Gattermenge \{AND,XOR\} vollst\"andig ist:
+\begin{proof*}
+    \[
+        \begin{aligned}
+            a\cdot a & =a & \\
+            a\xor a & =0 & \Rightarrow\!\Leftarrow
+        \end{aligned}
+    \]
+\end{proof*}
+
+\section{Boolesche Algebra}
+\[
+    \begin{aligned}
+        0 & :=1\\
+        1 & :=30
+    \end{aligned}
+    \therefore
+    \begin{aligned}
+        a\land 1=a & \Leftrightarrow GGT(a, 30)=a\\
+        a\lor 0=a & \Leftrightarrow KGV(a, 30)=a
+    \end{aligned}
+\]
+\end{document}

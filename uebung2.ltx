@@ -1,0 +1,104 @@
+\documentclass[a4paper, 12pt]{article}
+ 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[ngerman=ngerman-x-latest]{hyphsubst}
+\usepackage{csquotes}
+\usepackage{hyphenat}
+\usepackage{textcmds}
+\usepackage{mathtools}
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{circuitikz}
+
+\renewcommand\qedsymbol{$\blacksquare$}
+\newcommand\ZZ{$\mathrm{Z\kern-.3em\raise-0.5ex\hbox{Z}}$}
+\newcommand*\xor{\oplus}
+
+\title{DCT - \"Ubung 2}
+\author{Nik Benson}
+
+\begin{document}
+
+\maketitle
+\tableofcontents\newpage
+
+
+\section{Minimale SOP-Form, Karnaugh-Diagramm}
+Gegeben ist folgende Logikfunktion $z(a,b,c,d)=(1,3,8,10,11,12,13,14,15)$.
+
+\section{Minimale SOP-Form, Algebraische Manipulation}
+Gegeben ist folgende Logikfunktion:
+\begin{equation*}
+      z(x_1,x_2,x_3,x_4)=\neg x_1\neg x_3\neg x_4+\neg x_1x_3x_4+\neg x_1x_3\neg x_4+x_3x_4+x_1\neg x_2\neg x_3\neg x_4
+\end{equation*}
+
+\subsection{Berechnen Sie die minimale SOP-Form f\"ur z durch algebraische Manipulation}
+\begin{equation*}
+      \begin{aligned}
+            z(x_1,x_2,x_3,x_4) & = & {\color{red}\neg x_1\neg x_3\neg x_4} & + & {\color{blue}\neg x_1x_3x_4} & + & {\color{red}\neg x_1x_3\neg x_4} & + & {\color{blue}x_3x_4} & + & x_1\neg x_2\neg x_3\neg x_4\\
+            & = & & & & & \neg x_1\neg x_4 & + & x_3x_4 & + & x_1\neg x_2\neg x_3\neg x_4
+      \end{aligned}
+\end{equation*}
+
+\subsection{Zeigen Sie, dass dies die einzige minimale SOP-Form f\"ur $z$ ist}
+Im Karnaugh-Diagramm bilden sich keine Gruppen.
+
+\section{Noch eine Alarmanlage \dots}
+Ein Alarmsystem besteht aus vier Schaltern. Der Alarm soll losgehen, wenn mindestens
+zwei der vier Schalter geschlossen werden.
+
+\subsection{Ermitteln Sie eine minimale SOP-Form f\"ur dieses Alarmsystem mittels Karnaugh-Diagramm.}
+\begin{center}
+  \begin{tabular}{c|c|c|c|c|c}
+      & a & a &   &   &   \\
+           \hline     
+    c & 1 & 1 & 1 & 0 &   \\
+            \hline    
+    c & 1 & 1 & 1 & 1 & d \\
+            \hline    
+      & 1 & 1 & 1 & 0 & d \\
+            \hline    
+      & 0 & 1 & 0 & 0 &   \\
+           \hline     
+      &   & b & b &   &   
+\end{tabular}
+\end{center}
+$ac+\neg abc+a\neg cd+\neg a\neg bcd+\neg ab\neg cd+ab\neg c\neg d$
+\subsection{Realisieren Sie die entsprechende Schaltung mit 2-NAND Gattern.}
+\includegraphics[width=\paperwidth-3in]{2.3.2.png}
+
+\section{Quine-McCluskey Verfahren, \"Uberdeckungstabelle}
+
+\section{Heuristische Minimierung}
+
+\section{Unvollst\"andige Spezi\"kation}
+Es ist eine Schaltung mit vier Eing\"angen $(x_1, x_2, x_3, x_4)$ und einem Ausgang $z$ zu entwerfen.
+Die Eing\"ange stellen eine Zahl im BCD-Code (binary coded decimal) dar, dh. als
+Eingangswerte sind die 10 Zahlen $(0, 0, 0, 0)$ f\"ur dezimal \qq{0} bis $(1, 0, 0, 1)$ f\"ur dezimal
+\qq{9} m\"oglich. Andere Eingangswertekombinationen kommen nicht vor. Der Ausgang $z$ soll
+genau dann 1 sein, wenn die BCD-Zahl gr\"osser als Null und ohne Rest durch 3 teilbar ist.
+
+\begin{center}
+    \begin{tabular}{c|c|c|c|c|c}
+        & a & a &   &   &   \\
+             \hline     
+      c &   & - & 1 & 0 &   \\
+              \hline    
+      c & - &   & 0 & 1 & d \\
+              \hline    
+        & 1 & - & 0 & 0 & d \\
+              \hline    
+        & 0 &   & 0 & 0 &   \\
+             \hline     
+        &   & b & b &   &   
+  \end{tabular}
+\end{center}
+
+\subsection{2-Stufige SOP mit don't cares}
+$a\neg cd+\neg bcd+bc\neg d$
+
+\subsection{2-Stufige SOP ohne don't cares}
+$a\neg \neg bcd+\neg a\neg bcd+\neg abc\neg d$
+\end{document}
